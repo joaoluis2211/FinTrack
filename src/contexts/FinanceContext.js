@@ -1,6 +1,5 @@
 import { useEffect, useState, createContext, useContext } from "react";
 
-const [transacoes, setTransacoes] = useState([]);
 const FinanceContext = createContext({
     transacoes: [{
         id: 1,
