@@ -3,6 +3,7 @@ import { FinanceProvider } from './contexts'
 import './App.css'
 import { ListaTransacoes, ResumoCard } from './components';
 import { FormularioTransacao } from './components/FormularioTransacao';
+import { Navbar } from './components';
 
 function App() {
   const [transacoes, setTransacoes] = useState(() => {
@@ -43,24 +44,29 @@ function App() {
   return (
     <FinanceProvider value={{adicionarTransacao, removerTransacao, transacoes, entrada, saida, total}}>  
       <div className='flex flex-col items-center w-full'>
-        <header>
-          <h1 className='hidden'>FinTrack 💰</h1>
+        <header className='flex w-full'>
+          <Navbar />
         </header>
 
-        <section className='flex flex-col w-full items-center'>
-          <FormularioTransacao  />
-        </section>
+        <main className='flex flex-col bg-gray-100 w-full px-8 pt-8'>
 
-        <div className='flex flex-col w-full items-center'>
-          <ListaTransacoes />
-        </div>
+          <section className='flex w-full gap-6 mb-8'>
+            <ResumoCard titulo="Entradas" valor={entrada} tipo="entrada" />
+            <ResumoCard titulo="Saídas" valor={saida} tipo="saida" />
+            <ResumoCard titulo="Saldo Total" valor={total} tipo="total" />
+          </section>
 
-        <section className='flex w-full'>
-          <ResumoCard titulo="Entradas" valor={entrada} tipo="entrada" />
-          <ResumoCard titulo="Saídas" valor={saida} tipo="saida" />
-          <ResumoCard titulo="Saldo Total" valor={total} tipo="total" />
-        </section>
-        
+          <div className='flex gap-8'>
+            <section className='flex flex-col w-full items-center'>
+              <FormularioTransacao  />
+            </section>
+
+            <div className='flex flex-col items-center w-full'>
+              <ListaTransacoes />
+            </div>
+          </div>
+        </main>
+
       </div>
     </FinanceProvider>  
   )

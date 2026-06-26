@@ -5,8 +5,8 @@ export function ListaTransacoes() {
   const { transacoes, removerTransacao } = useFinance();
 
   return (
-    <div className="flex flex-col w-3xl bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">Histórico</h2>
+    <div className="flex flex-col w-full bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+      <h2 className="text-2xl mb-6 ">Histórico de Transações</h2>
       
       <ul className="space-y-3">
         {transacoes.map((item) => (
