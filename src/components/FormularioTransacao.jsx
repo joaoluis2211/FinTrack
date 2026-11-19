@@ -1,51 +1,148 @@
-import {useState, useEffect} from 'react'
+
+import { useState } from 'react'
 import { useFinance } from '../contexts'
 
-export function FormularioTransacao(){
-    const {adicionarTransacao} = useFinance();
-    const [descricao, setDescricao] = useState("");
-    const [valor, setValue] = useState("");
-    const [tipo, setTipo] = useState("");
+function obterDataAtual() {
+    const hoje = new Date()
+    const ano = hoje.getFullYear()
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0')
+    const dia = String(hoje.getDate()).padStart(2, '0')
 
-    const handdleSubmit = (e) => {
-        e.preventDefault();
-        if (!descricao || !valor) return alert("Preencha todos os campos!");
+    return `${ano}-${mes}-${dia}`
+}
+
+export function FormularioTransacao() {
+    const { adicionarTransacao } = useFinance()
+
+    const [descricao, setDescricao] = useState('')
+    const [valor, setValor] = useState('')
+    const [data, setData] = useState(obterDataAtual())
+    const [tipo, setTipo] = useState('')
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        if (!descricao.trim() || !valor || !data || !tipo) {
+            return alert('Preencha todos os campos!')
+        }
+
+        if (Number(valor) <= 0) {
+            return alert('O valor deve ser maior que zero!')
+        }
 
         adicionarTransacao({
-            descricao,
+            descricao: descricao.trim(),
             valor: Number(valor),
+            data,
             tipo
         })
 
-        setDescricao("")
-        setValue("")
+        setDescricao('')
+        setValor('')
+        setData(obterDataAtual())
+        setTipo('')
     }
-    
-    return(
-        <form className="flex flex-col p-6 w-full bg-white border-2 rounded-md border-gray-300" onSubmit={handdleSubmit}>
-            <h2 className='text-2xl mb-6'>Nova Transação</h2>
-            <div className='mb-4'>
-                <label className='text-lg' >Descrição:</label>
-                <input className='border border-gray-400 min-h-10 w-full rounded-sm' type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
-            </div>
 
-            <div className='mb-4'>
-                <label className='text-lg'>Valor:</label>
-                <input className='border border-gray-400 min-h-10 w-full rounded-sm' type="text" value={valor} onChange={(e) => setValue(e.target.value)}/>
-            </div>
+    const estiloInput = "w-full min-h-11 px-3 rounded-lg border border-gray-300 bg-white text-neutral-800 outline-none transition focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
 
-            <div className='flex gap-5 mb-4'>
-                <label className='flex gap-1'>
-                    <input className='w-4' type="radio" name="tipo" value="entrada" checked={tipo === 'entrada'}  onChange={(e) => setTipo(e.target.value)} />
-                    <span className=' text-lg'>Entrada</span>
+    return (
+        <form
+            className="flex flex-col w-full p-6 bg-white border border-gray-200 rounded-xl shadow-sm"
+            onSubmit={handleSubmit}
+        >
+            <h2 className="text-xl font-bold text-neutral-900 mb-6">
+                Nova Transação
+            </h2>
+
+            <div className="flex flex-col gap-2 mb-5">
+                <label htmlFor="descricao" className="text-sm font-medium text-neutral-700">
+                    Descrição
                 </label>
-                <label className='flex gap-1'>
-                    <input className='w-4' type="radio" name="tipo" value="saida" checked={tipo === 'saida'} onChange={(e) => setTipo(e.target.value)} />
-                    <span className='text-lg'>Saída</span>
-                </label>
+
+                <input
+                    id="descricao"
+                    className={estiloInput}
+                    type="text"
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                    placeholder="Ex.: Conta de energia"
+                    required
+                />
             </div>
 
-            <button className='p-2 w-full    bg-green-500 rounded-sm text-white font-medium' type='submit'>Adicionar</button>
+            <div className="flex flex-col gap-2 mb-5">
+                <label htmlFor="valor" className="text-sm font-medium text-neutral-700">
+                    Valor
+                </label>
+
+                <input
+                    id="valor"
+                    className={estiloInput}
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    value={valor}
+                    onChange={(e) => setValor(e.target.value)}
+                    placeholder="0,00"
+                    required
+                />
+            </div>
+
+            <div className="flex flex-col gap-2 mb-5">
+                <label htmlFor="data" className="text-sm font-medium text-neutral-700">
+                    Data da transação
+                </label>
+
+                <input
+                    id="data"
+                    className={estiloInput}
+                    type="date"
+                    value={data}
+                    onChange={(e) => setData(e.target.value)}
+                    required
+                />
+            </div>
+
+            <div className="flex flex-col gap-3 mb-6">
+                <span className="text-sm font-medium text-neutral-700">
+                    Tipo de transação
+                </span>
+
+                <div className="flex gap-6">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-neutral-700">
+                        <input
+                            type="radio"
+                            name="tipo"
+                            value="entrada"
+                            checked={tipo === 'entrada'}
+                            onChange={(e) => setTipo(e.target.value)}
+                            className="accent-yellow-400 w-4 h-4"
+                            required
+                        />
+                        Entrada
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-neutral-700">
+                        <input
+                            type="radio"
+                            name="tipo"
+                            value="saida"
+                            checked={tipo === 'saida'}
+                            onChange={(e) => setTipo(e.target.value)}
+                            className="accent-yellow-400 w-4 h-4"
+                            required
+                        />
+                        Saída
+                    </label>
+                </div>
+            </div>
+
+            <button
+                className="w-full min-h-11 bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 rounded-lg text-neutral-900 font-semibold transition-colors cursor-pointer"
+                type="submit"
+            >
+                Adicionar transação
+            </button>
         </form>
     )
-} 
+}
