@@ -1,20 +1,49 @@
+
 export function Navbar() {
     return (
-        <nav className="flex w-full h-28 items-center">
-            <div className="w-1/2">
-                <h1 className="ml-6 text-5xl font-bold"><span className="text-green-500">Fin</span>Track</h1>
+        <nav className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 gap-4">
+
+            <div>
+                <h1 className="text-4xl font-bold tracking-tight text-white">
+                    Fin<span className="text-yellow-400">Track</span>
+                </h1>
             </div>
-            <div className="flex w-full gap-11 items-center h-full">
-                <a className="flex h-full items-center focus:border-b-4 px-4 focus:border-green-500 focus:text-green-500
-             text-lg text-gray-600" href="#">Dashboard</a>
-                <a className="flex h-full items-center focus:border-b-4 px-4 focus:border-green-500 focus:text-green-500
-             text-lg text-gray-600" href="#">Transaction</a>
-                <a className="flex h-full items-center focus:border-b-4 px-4 focus:border-green-500 focus:text-green-500
-             text-lg text-gray-600" href="#">Budget</a>
-                <a className="flex h-full items-center focus:border-b-4 px-4 focus:border-green-500 focus:text-green-500
-             text-lg text-gray-600" href="#">Reports</a>
-                <a className="flex h-full items-center focus:border-b-4 px-4 focus:border-green-500 focus:text-green-500
-             text-lg text-gray-600" href="#">Settings</a>
+
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+                <a
+                    className="px-4 py-3 text-sm font-semibold text-yellow-400 border-b-2 border-yellow-400"
+                    href="#"
+                >
+                    Dashboard
+                </a>
+
+                <a
+                    className="px-4 py-3 text-sm font-medium text-gray-300 hover:text-yellow-400 transition-colors"
+                    href="#"
+                >
+                    Transaction
+                </a>
+
+                <a
+                    className="px-4 py-3 text-sm font-medium text-gray-300 hover:text-yellow-400 transition-colors"
+                    href="#"
+                >
+                    Budget
+                </a>
+
+                <a
+                    className="px-4 py-3 text-sm font-medium text-gray-300 hover:text-yellow-400 transition-colors"
+                    href="#"
+                >
+                    Reports
+                </a>
+
+                <a
+                    className="px-4 py-3 text-sm font-medium text-gray-300 hover:text-yellow-400 transition-colors"
+                    href="#"
+                >
+                    Settings
+                </a>
             </div>
         </nav>
     )

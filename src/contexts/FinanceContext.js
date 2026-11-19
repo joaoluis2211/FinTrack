@@ -1,22 +1,17 @@
-import { useEffect, useState, createContext, useContext } from "react";
+
+import { createContext, useContext } from "react";
 
 const FinanceContext = createContext({
-    transacoes: [{
-        id: 1,
-        descricao: "Salário",
-        quantia: 5000,
-        tipo: "entrada",
-    }],
+    transacoes: [],
     entrada: 0,
     saida: 0,
     total: 0,
-
-    adicionarTransacao: (transacao) => {},
-    removerTransacao: (id) => {}
+    adicionarTransacao: () => {},
+    removerTransacao: () => {}
 });
 
 export const useFinance = () => {
     return useContext(FinanceContext);
-}
+};
 
 export const FinanceProvider = FinanceContext.Provider;

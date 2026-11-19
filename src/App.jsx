@@ -1,74 +1,61 @@
-import { useState, useEffect} from 'react'
+
+import { useState, useEffect } from 'react'
 import { FinanceProvider } from './contexts'
 import './App.css'
-import { ListaTransacoes, ResumoCard } from './components';
-import { FormularioTransacao } from './components/FormularioTransacao';
-import { Navbar } from './components';
+import { ListaTransacoes, ResumoCard, Navbar } from './components'
+import { FormularioTransacao } from './components/FormularioTransacao'
 
 function App() {
   const [transacoes, setTransacoes] = useState(() => {
-    const transacoesSalvas = localStorage.getItem("transacoes");
-    return transacoesSalvas ? JSON.parse(transacoesSalvas) : [];
-  });
-  const [entrada, setEntrada] = useState(0);
-  const [saida, setSaida] = useState(0);
-  const [total, setTotal] = useState(0);
-
+    const transacoesSalvas = localStorage.getItem("transacoes")
+    return transacoesSalvas ? JSON.parse(transacoesSalvas) : []
+  })
 
   const adicionarTransacao = (transacao) => {
-    setTransacoes((prev) => ([...prev, {id: Date.now(), ...transacao}]));
-  };
-
-  const removerTransacao = (id) => {
-    setTransacoes((prev) => (prev.filter((prevTransacao) => prevTransacao.id !== id)));
+    setTransacoes((prev) => [...prev, { id: Date.now(), ...transacao }])
   }
 
+  const removerTransacao = (id) => {
+    setTransacoes((prev) => prev.filter((transacao) => transacao.id !== id))
+  }
+
+  const entrada = transacoes
+    .filter((transacao) => transacao.tipo === "entrada")
+    .reduce((total, transacao) => total + Number(transacao.valor), 0)
+
+  const saida = transacoes
+    .filter((transacao) => transacao.tipo === "saida")
+    .reduce((total, transacao) => total + Number(transacao.valor), 0)
+
+  const total = entrada - saida
+
   useEffect(() => {
-    const totalEntradas = transacoes
-      .filter(transacao => transacao.tipo === "entrada")
-      .reduce((total, transacao) => total + Number(transacao.valor), 0); // Garante que é número
+    localStorage.setItem("transacoes", JSON.stringify(transacoes))
+  }, [transacoes])
 
-    const totalSaidas = transacoes
-      .filter(transacao => transacao.tipo === "saida")
-      .reduce((total, transacao) => total + Number(transacao.valor), 0);
-
-    setEntrada(totalEntradas);
-    setSaida(totalSaidas);
-    setTotal(totalEntradas - totalSaidas);
-  }, [transacoes]);
-
-  useEffect(() => {
-    localStorage.setItem("transacoes", JSON.stringify(transacoes));
-  }, [transacoes]);
-
+  
   return (
-    <FinanceProvider value={{adicionarTransacao, removerTransacao, transacoes, entrada, saida, total}}>  
-      <div className='flex flex-col items-center w-full'>
-        <header className='flex w-full'>
+    <FinanceProvider value={{ adicionarTransacao, removerTransacao, transacoes, entrada, saida, total }}>
+      <div className="min-h-screen bg-neutral-100">
+        <header className="w-full bg-neutral-900">
           <Navbar />
         </header>
 
-        <main className='flex flex-col bg-gray-100 w-full px-8 pt-8'>
-
-          <section className='flex w-full gap-6 mb-8'>
+        <main className="max-w-7xl mx-auto w-full px-4 py-8 sm:px-6 lg:px-8">
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
             <ResumoCard titulo="Entradas" valor={entrada} tipo="entrada" />
             <ResumoCard titulo="Saídas" valor={saida} tipo="saida" />
             <ResumoCard titulo="Saldo Total" valor={total} tipo="total" />
           </section>
 
-          <div className='flex gap-8'>
-            <section className='flex flex-col w-full items-center'>
-              <FormularioTransacao  />
-            </section>
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <FormularioTransacao />
 
-            <div className='flex flex-col items-center w-full'>
-              <ListaTransacoes />
-            </div>
-          </div>
+            <ListaTransacoes />
+          </section>
         </main>
-
       </div>
-    </FinanceProvider>  
+    </FinanceProvider>
   )
 }
 
